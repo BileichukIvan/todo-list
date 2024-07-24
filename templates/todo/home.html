@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+  <h1>Todo List</h1>
+  <a class="btn btn-primary mb-3" href="{% url 'todo:task-create' %}">Add New Task</a>
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ task.content }}</strong><br>
+          Created: {{ task.created_at }}<br>
+          Deadline: {{ task.deadline }}<br>
+          Status: {{ task.is_done|yesno:"Done,Not Done" }}<br>
+          Tags: {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        </div>
+        <div>
+          <a class="btn btn-secondary btn-sm" href="{% url 'todo:task-update' task.pk %}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'todo:task-delete' task.pk %}">Delete</a>
+          <a class="btn btn-info btn-sm" href="{% url 'todo:task-toggle' task.pk %}">
+            {% if task.is_done %}Undo{% else %}Complete{% endif %}
+          </a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

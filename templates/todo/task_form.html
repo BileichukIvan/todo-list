@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Delete Task</h1>
-<p>Are you sure you want to delete the task "{{ object.content }}"?</p>
+<h1>{% if form.instance.pk %}Edit Task{% else %}New Task{% endif %}</h1>
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Yes, delete</button>
+    {{ form.as_p }}
+    <button type="submit">Save</button>
 </form>
 <a href="{% url 'todo:task-list' %}">Cancel</a>
 {% endblock %}
