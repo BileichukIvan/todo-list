@@ -14,8 +14,15 @@ class HomePageView(generic.View):
     template_name = "todo/home.html"
 
     def get(self, request):
-        tasks = Task.objects.all().order_by("is_done", "-created_at")
-        return render(request, self.template_name, {"tasks": tasks})
+        tasks = Task.objects.all().order_by(
+            "is_done",
+            "-created_at"
+        )
+        return render(
+            request,
+            self.template_name,
+            {"tasks": tasks}
+        )
 
 
 def toggle_task_status(request, pk):
