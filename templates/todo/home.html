@@ -1,22 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Todo List</h1>
-  <a class="btn btn-primary mb-3" href="{% url 'todo:task-create' %}">Add New Task</a>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Todo List</h1>
+    <a class="btn btn-primary" href="{% url 'todo:task-create' %}">Add Task</a>
+  </div>
   <ul class="list-group">
     {% for task in tasks %}
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <div>
-          <strong>{{ task.content }}</strong><br>
-          Created: {{ task.created_at }}<br>
-          Deadline: {{ task.deadline }}<br>
-          Status: {{ task.is_done|yesno:"Done,Not Done" }}<br>
-          Tags: {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          <strong>
+            {{ task.content }}
+            <span class="{% if task.is_done %}text-success{% else %}text-danger{% endif %}">
+              {{ task.is_done|yesno:"Done,Not Done" }}
+            </span>
+          </strong><br>
+          Created: {{ task.created_at }}
+          {% if task.deadline %}
+            <span class="text-darkred">Deadline: {{ task.deadline }}</span>
+          {% endif %}<br>
+          <strong class="text-muted">
+            Tags: {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            <a class="text-decoration-none text-primary" href="{% url 'todo:task-update' task.pk %}">Update</a>
+            <a class="text-decoration-none text-primary" href="{% url 'todo:task-delete' task.pk %}">Delete</a>
+          </strong>
         </div>
         <div>
-          <a class="btn btn-secondary btn-sm" href="{% url 'todo:task-update' task.pk %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'todo:task-delete' task.pk %}">Delete</a>
-          <a class="btn btn-info btn-sm" href="{% url 'todo:task-toggle' task.pk %}">
+          <a class="btn {% if task.is_done %}btn-secondary{% else %}btn-success{% endif %} btn-sm"
+             href="{% url 'todo:task-toggle' task.pk %}">
             {% if task.is_done %}Undo{% else %}Complete{% endif %}
           </a>
         </div>
