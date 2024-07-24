@@ -3,7 +3,6 @@ from django.urls import path
 from todo.views import (
     HomePageView,
     toggle_task_status,
-    TaskListView,
     TaskCreateView,
     TaskUpdateView,
     TaskDeleteView,
@@ -23,11 +22,6 @@ urlpatterns = [
         "tasks/<int:pk>/toggle/",
         toggle_task_status,
         name="task-toggle"
-    ),
-    path(
-        "tasks/",
-        TaskListView.as_view(),
-        name="task-list"
     ),
     path(
         "tasks/new/",
